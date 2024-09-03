@@ -1,3 +1,5 @@
+"use client";
+
 import CodeEditor from "@/components/CodeEditor";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 
