@@ -1,5 +1,5 @@
 import CodeMirror, { Extension } from "@uiw/react-codemirror";
-import { draculaInit } from "@uiw/codemirror-theme-dracula";
+import { xcodeDarkInit } from "@uiw/codemirror-theme-xcode";
 
 interface CodeEditorProps {
   code: string;
@@ -27,7 +27,7 @@ export default function CodeEditor({
         syntaxHighlighting: true,
         indentOnInput: true,
       }}
-      theme={draculaInit()}
+      theme={xcodeDarkInit()}
       className="h-full w-full overflow-y-scroll rounded-lg"
       extensions={[language]}
     />

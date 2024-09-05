@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "dracula-bg": "#282A36",
+        "dracula-bg": "#292A2F",
+        "dracula-fg": "#F8F8F2",
       },
     },
   },
