@@ -28,7 +28,7 @@ export default function CodeEditor({
         indentOnInput: true,
       }}
       theme={xcodeDarkInit()}
-      className="h-full w-full overflow-y-scroll rounded-lg"
+      className="h-full w-full overflow-y-auto rounded-lg"
       extensions={[language]}
     />
   );

@@ -2,10 +2,12 @@ export default [
   {
     name: "javascript",
     code: `console.log('Hello, World!')`,
+    extension: "js",
   },
   {
     name: "python",
     code: `print('Hello, World!')`,
+    extension: "py",
   },
   {
     name: "java",
@@ -13,6 +15,7 @@ export default [
             public static void main(String[] args) {
                 System.out.println("Hello, World!");
             }`,
+    extension: "java",
   },
   {
     name: "c",
@@ -21,6 +24,7 @@ export default [
                 printf("Hello, World!");
                 return 0;
             }`,
+    extension: "c",
   },
   {
     name: "cpp",
@@ -29,5 +33,6 @@ export default [
                 std::cout << "Hello, World!";
                 return 0;
             }`,
+    extension: "cpp",
   },
 ];
