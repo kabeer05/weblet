@@ -1,13 +1,34 @@
 "use client";
 
 import CodeEditor from "@/components/CodeEditor";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { useState } from "react";
 import endpoints from "@/lib/endpoints";
+import langs from "@/lib/langs";
+import { LanguageName } from "@uiw/codemirror-extensions-langs";
 
 export default function Home() {
   const [code, setCode] = useState<string>("");
   const [input, setInput] = useState<string>("");
+  const [language, setLanguage] = useState<{
+    name: string;
+    code: string;
+    extension: string;
+    label: string;
+  }>({
+    name: "python",
+    code: `print('Hello, World!')`,
+    extension: "py",
+    label: "Python",
+  });
+
   const [output, setOutput] = useState<{
     stdout: string | null;
     stderr: string | null;
@@ -20,6 +41,12 @@ export default function Home() {
     executionTime: 0,
   });
 
+  function changeLanguage(lang: string) {
+    const language_set = langs.find((l) => l.name === lang)!;
+    setLanguage(language_set);
+    setCode(language_set.code);
+  }
+
   async function compileCode() {
     try {
       const response = await fetch(endpoints.onecompiler, {
@@ -30,18 +57,17 @@ export default function Home() {
           "x-rapidapi-host": "onecompiler-apis.p.rapidapi.com",
         },
         body: JSON.stringify({
-          language: "python",
+          language: language.name,
           stdin: input,
           files: [
             {
-              name: "main.py",
+              name: `main.${language.extension}`,
               content: code,
             },
           ],
         }),
       });
       const data = await response.json();
-      console.log(data);
 
       if (data.status === "success") {
         setOutput({
@@ -51,19 +77,48 @@ export default function Home() {
           executionTime: data.executionTime,
         });
       } else {
-        console.log("Error: ", data);
+        console.log("Error (API): ", data);
       }
-    } catch (_) {}
+    } catch (err) {
+      console.log("Error (Try/Catch): ", err);
+    }
   }
 
   return (
-    <div className="h-screen w-full grid grid-cols-3 grid-rows-6 gap-4 px-6 py-6">
-      <div className="bg-dracula-bg col-span-2 row-span-6 rounded-lg">
+    <div className="h-screen w-full grid grid-cols-3 grid-rows-6 gap-4 px-6 py-6 ">
+      <div className="bg-dracula-bg col-span-2 row-span-6 rounded-lg relative">
         <CodeEditor
           code={code}
-          language={loadLanguage("python")!}
+          language={loadLanguage(`${language.name}` as LanguageName)!}
           onChange={(value: string) => setCode(value)}
         />
+
+        <div className="absolute top-4 right-4 z-10">
+          <Select onValueChange={changeLanguage}>
+            <SelectTrigger className="w-[160px] bg-[#212124] text-white outline-none border border-white">
+              <SelectValue placeholder="Select Language" />
+            </SelectTrigger>
+            <SelectContent className="bg-[#212124] text-white">
+              {langs.map(
+                (
+                  lang: {
+                    name: string;
+                    code: string;
+                    extension: string;
+                    label: string;
+                  },
+                  index: number
+                ) => {
+                  return (
+                    <SelectItem key={index} value={lang.name}>
+                      {lang.label}
+                    </SelectItem>
+                  );
+                }
+              )}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Config Buttons */}
