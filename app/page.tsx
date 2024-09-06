@@ -140,7 +140,7 @@ export default function Home() {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full bg-dracula-bg text-white p-4 border-none outline-none resize-none flex-1 overflow-auto rounded-b-lg border-t"
+          className="w-full bg-dracula-bg text-white p-4 border-none outline-none resize-none flex-1 overflow-auto rounded-b-lg border-t text-sm"
           placeholder="Enter input here"
         />
       </div>
