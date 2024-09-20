@@ -146,8 +146,9 @@ export default function Edit({ params: { id } }: { params: { id: string } }) {
       {/* Config Buttons */}
       <div className="bg-transparent col-start-3 rounded-lg flex items-center justify-center">
         <button
+          disabled={outputState === OutputLoadingState.Compiling}
           onClick={compileCode}
-          className="px-6 py-3 rounded-full relative bg-[#292A2F] text-white text-sm hover:shadow-2xl hover:shadow-white/[0.1] transition duration-200 border border-slate-600"
+          className="px-6 py-3 rounded-full relative bg-[#292A2F] text-white text-sm hover:shadow-2xl hover:shadow-white/[0.1] transition duration-200 border border-slate-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none"
         >
           <div className="absolute inset-x-0 h-px w-1/2 mx-auto -top-px shadow-2xl  bg-gradient-to-r from-transparent via-teal-500 to-transparent" />
           <span className="relative z-20">Get Disappointed</span>

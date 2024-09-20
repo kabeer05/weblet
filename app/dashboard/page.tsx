@@ -27,7 +27,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getScripts, createNewScript } from "@/controllers/supabaseRequests";
+import {
+  getScripts,
+  createNewScript,
+  deleteScript,
+} from "@/controllers/supabaseRequests";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -75,10 +79,29 @@ export default function Dashboard() {
         ...newScriptForm,
       });
 
+      setIsDialogOpen(false);
       setScripts([...scripts, newScript[0]]);
     } catch (error) {
       console.error("Error creating new script:", error);
       return;
+    }
+  };
+
+  const deleteExistingScript = async (id: string) => {
+    try {
+      const token = await getToken({
+        template: "supabase",
+      });
+      const updatedScripts = await deleteScript({
+        user_id: userId!,
+        token,
+        script_id: id,
+      });
+      console.log("Scripts after delete:", updatedScripts);
+
+      setScripts(scripts.filter((script) => script.id !== id));
+    } catch (error) {
+      console.error("Error deleting script:", error);
     }
   };
 
@@ -155,7 +178,7 @@ export default function Dashboard() {
             </Select>
           </div>
           <DialogFooter>
-            <Button onClick={createScript}>
+            <Button onClick={createScript} type="submit">
               <span>Create Script</span>
             </Button>
           </DialogFooter>
@@ -222,18 +245,29 @@ export default function Dashboard() {
                             </TableCell>
                             <TableCell>
                               <div className="flex items-center gap-2">
-                                <Button variant="ghost" size="icon">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="hover:bg-black hover:bg-opacity-5"
+                                >
                                   <Link href={`/edit/${script.id}`}>
                                     <FilePenIcon className="h-4 w-4" />
                                   </Link>
                                 </Button>
-                                <Button variant="ghost" size="icon">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="hover:bg-black hover:bg-opacity-5"
+                                >
                                   <ShareIcon className="h-4 w-4" />
                                 </Button>
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="text-red-500"
+                                  onClick={() =>
+                                    deleteExistingScript(script.id)
+                                  }
+                                  className="text-red-500 hover:bg-red-500 hover:text-white"
                                 >
                                   <TrashIcon className="h-4 w-4" />
                                 </Button>
