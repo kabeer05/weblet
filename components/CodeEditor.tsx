@@ -5,12 +5,14 @@ interface CodeEditorProps {
   code: string;
   language: Extension;
   onChange?: (value: string) => void;
+  readOnly: boolean;
 }
 
 export default function CodeEditor({
   code,
   language,
   onChange,
+  readOnly,
 }: CodeEditorProps) {
   return (
     <CodeMirror
@@ -30,6 +32,7 @@ export default function CodeEditor({
       theme={xcodeDarkInit()}
       className="h-full w-full overflow-y-auto rounded-lg"
       extensions={[language]}
+      readOnly={readOnly}
     />
   );
 }

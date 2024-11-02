@@ -105,6 +105,12 @@ export default function Dashboard() {
     }
   };
 
+  const copyLink = async (id: string) => {
+    const baseUrl = window.location.origin;
+    await navigator.clipboard.writeText(`${baseUrl}/view/${id}`);
+    alert("Copied");
+  };
+
   if (!userId) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
@@ -258,6 +264,9 @@ export default function Dashboard() {
                                   variant="ghost"
                                   size="icon"
                                   className="hover:bg-black hover:bg-opacity-5"
+                                  onClick={() => {
+                                    copyLink(script.id);
+                                  }}
                                 >
                                   <ShareIcon className="h-4 w-4" />
                                 </Button>

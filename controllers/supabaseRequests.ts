@@ -95,3 +95,30 @@ export const deleteScript = async ({
 
   return data;
 };
+
+export const saveScript = async ({
+  user_id,
+  token,
+  script_id,
+  code,
+}: {
+  user_id: string;
+  token: any;
+  script_id: string;
+  code: string;
+}) => {
+  const supabase = await supabaseClient(token);
+  const { error, data } = await supabase
+    .from("scripts")
+    .update({
+      code,
+    })
+    .eq("user_id", user_id)
+    .eq("id", script_id);
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};

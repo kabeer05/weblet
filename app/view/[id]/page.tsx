@@ -7,7 +7,7 @@ import endpoints from "@/lib/endpoints";
 import langs from "@/lib/langs";
 import { LanguageName } from "@uiw/codemirror-extensions-langs";
 import { UserButton, useAuth } from "@clerk/nextjs";
-import { getScript, saveScript } from "@/controllers/supabaseRequests";
+import { getScript } from "@/controllers/supabaseRequests";
 import { Skeleton } from "@/components/ui/skeleton";
 
 enum OutputLoadingState {
@@ -123,41 +123,13 @@ export default function Edit({ params: { id } }: { params: { id: string } }) {
     }
   }
 
-  async function saveCode() {
-    const token = await getToken({
-      template: "supabase",
-    });
-    try {
-      await saveScript({
-        user_id: userId!,
-        token,
-        script_id: id,
-        code,
-      });
-      alert("Code saved successfully!");
-    } catch (err) {
-      console.log("Error:", err);
-    }
-  }
-
-  if (!userId) {
-    return (
-      <div className="h-screen w-full flex items-center justify-center">
-        <h1 className="text-white text-2xl font-semibold">
-          Please sign in to continue
-        </h1>
-      </div>
-    );
-  }
-
   return (
     <div className="h-screen w-full grid grid-cols-3 grid-rows-6 gap-4 px-6 py-6 bg-[#212124]">
       <div className="bg-dracula-bg col-span-2 row-span-6 rounded-lg relative">
         <CodeEditor
           code={code}
           language={loadLanguage(`${language.name}` as LanguageName)!}
-          onChange={(value: string) => setCode(value)}
-          readOnly={false}
+          readOnly={true}
         />
       </div>
 
@@ -171,15 +143,6 @@ export default function Edit({ params: { id } }: { params: { id: string } }) {
           <div className="absolute inset-x-0 h-px w-1/2 mx-auto -top-px shadow-2xl  bg-gradient-to-r from-transparent via-teal-500 to-transparent" />
           <span className="relative z-20">Get Disappointed</span>
         </button>
-        <button
-          disabled={outputState === OutputLoadingState.Compiling}
-          onClick={saveCode}
-          className="px-6 py-3 rounded-full relative bg-[#292A2F] text-white text-sm hover:shadow-2xl hover:shadow-white/[0.1] transition duration-200 border border-slate-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none mx-2"
-        >
-          <div className="absolute inset-x-0 h-px w-1/2 mx-auto -top-px shadow-2xl  bg-gradient-to-r from-transparent via-red-500 to-transparent" />
-          <span className="relative z-20">Save</span>
-        </button>
-        <UserButton />
       </div>
 
       {/* Input */}
